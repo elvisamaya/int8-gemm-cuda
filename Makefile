@@ -17,7 +17,7 @@ BUILD := build
 all: $(BUILD)/gemm_bench
 
 $(BUILD)/gemm_bench: src/gemm_bench.cu src/common.cuh $(wildcard src/kernels/*.cuh) | $(BUILD)
-	$(NVCC) $(FLAGS) -o $@ src/gemm_bench.cu
+	$(NVCC) $(FLAGS) -o $@ src/gemm_bench.cu -lcublas
 
 test: $(BUILD)/gemm_bench
 	./$(BUILD)/gemm_bench --test

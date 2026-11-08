@@ -20,6 +20,8 @@
 #include "kernels/03_smem_tiled.cuh"
 #include "kernels/04_reg_tiled.cuh"
 #include "kernels/05_dp4a.cuh"
+#include "kernels/06_tensor_core.cuh"
+#include "kernels/07_cublas.cuh"
 
 struct Kernel {
     const char* name;
@@ -34,6 +36,8 @@ static const Kernel KERNELS[] = {
     {"smem_tiled",  "32x32 shared-memory tiles",           supports_any,         launch_smem},
     {"reg_tiled",   "64x64 tiles, 4x4 outputs/thread",     supports_any,         launch_regtile},
     {"dp4a",        "packed int8 dot products (dp4a)",     supports_dp4a,        launch_dp4a},
+    {"tensor_core", "int8 tensor cores (WMMA)",            supports_tensor_core, launch_tensor_core},
+    {"cublas",      "NVIDIA cuBLAS int8 GEMM",             supports_cublas,      launch_cublas},
 };
 
 // ------------------------------------------------------------------ CPU reference
@@ -125,6 +129,11 @@ static bool run_and_check(const Kernel& k, Problem& p, long& bad) {
     if (err == cudaSuccess) err = cudaDeviceSynchronize();
     if (err != cudaSuccess) {
         fprintf(stderr, "  %s: launch failed: %s\n", k.name, cudaGetErrorString(err));
+        return false;
+    }
+    if (std::strcmp(k.name, "cublas") == 0 && cublas_k::last_status() != CUBLAS_STATUS_SUCCESS) {
+        fprintf(stderr, "  cublas: returned status %d (int8 GEMM unsupported here?)\n",
+                int(cublas_k::last_status()));
         return false;
     }
     bad = p.check();
