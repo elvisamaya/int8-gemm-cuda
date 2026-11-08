@@ -19,6 +19,7 @@
 #include "kernels/02_coalesced.cuh"
 #include "kernels/03_smem_tiled.cuh"
 #include "kernels/04_reg_tiled.cuh"
+#include "kernels/05_dp4a.cuh"
 
 struct Kernel {
     const char* name;
@@ -32,6 +33,7 @@ static const Kernel KERNELS[] = {
     {"coalesced",   "threads remapped for coalescing",     supports_any,         launch_coalesced},
     {"smem_tiled",  "32x32 shared-memory tiles",           supports_any,         launch_smem},
     {"reg_tiled",   "64x64 tiles, 4x4 outputs/thread",     supports_any,         launch_regtile},
+    {"dp4a",        "packed int8 dot products (dp4a)",     supports_dp4a,        launch_dp4a},
 };
 
 // ------------------------------------------------------------------ CPU reference
