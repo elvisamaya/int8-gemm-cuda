@@ -16,6 +16,7 @@
 
 #include "common.cuh"
 #include "kernels/01_naive.cuh"
+#include "kernels/02_coalesced.cuh"
 
 struct Kernel {
     const char* name;
@@ -26,6 +27,7 @@ struct Kernel {
 
 static const Kernel KERNELS[] = {
     {"naive",       "1 thread/output, uncoalesced",        supports_any,         launch_naive},
+    {"coalesced",   "threads remapped for coalescing",     supports_any,         launch_coalesced},
 };
 
 // ------------------------------------------------------------------ CPU reference
