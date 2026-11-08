@@ -1,0 +1,8 @@
+{
+  "name": "Tesla T4",
+  "compute_capability": "7.5",
+  "sm_count": 40,
+  "sm_clock_mhz": 1590,
+  "memory_bandwidth_gbs": 320.1,
+  "shared_mem_per_block_kb": 48
+}
