@@ -18,6 +18,7 @@
 #include "kernels/01_naive.cuh"
 #include "kernels/02_coalesced.cuh"
 #include "kernels/03_smem_tiled.cuh"
+#include "kernels/04_reg_tiled.cuh"
 
 struct Kernel {
     const char* name;
@@ -30,6 +31,7 @@ static const Kernel KERNELS[] = {
     {"naive",       "1 thread/output, uncoalesced",        supports_any,         launch_naive},
     {"coalesced",   "threads remapped for coalescing",     supports_any,         launch_coalesced},
     {"smem_tiled",  "32x32 shared-memory tiles",           supports_any,         launch_smem},
+    {"reg_tiled",   "64x64 tiles, 4x4 outputs/thread",     supports_any,         launch_regtile},
 };
 
 // ------------------------------------------------------------------ CPU reference
